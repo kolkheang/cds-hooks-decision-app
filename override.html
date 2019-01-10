@@ -1,0 +1,34 @@
+<html>
+<title>Override Options</title>
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/node-uuid@1.4.8/uuid.min.js"></script>
+  <script>
+    var smart_messaging_origin = new URL(location.href).searchParams.get('smart_messaging_origin')
+
+    function sendMessage(msg) {
+      targetWindow = window.parent != window.top ? window.parent : window.opener;
+      targetWindow.postMessage(msg, smart_messaging_origin);
+    }
+
+    function getSelectedOptionAndOverrideReason() {
+      var selected = document.querySelector('input[name=option]:checked').value;
+      return uuid() + ": Override Option: " + selected + ", Override Reason: " + document.getElementById('override').value;
+    }
+  </script>
+</head>
+<body>
+  <h3>Override Options</h3>
+
+  <h3>Send message to EHR</h3>
+  <form>
+    <br><input type="radio" name="option" value="Remove Order">Remove Order</input>
+    <br><input type="radio" name="option" value="Disagree">Disagree</input>
+    <br><input type="radio" name="option" value="Not Applicable">Not Applicable</input>
+    <br><br>
+    Override Reason:
+    <br><input type="text" id="override" name="override"></input>
+    <br><br>
+    <button type="button" onclick="javascript:sendMessage(getSelectedOptionAndOverrideReason())">Submit</button>
+  </form>
+</body>
+</html>
